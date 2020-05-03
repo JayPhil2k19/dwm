@@ -68,6 +68,8 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
+#include "selfrestart.c"
+#include <X11/XF86keysym.h>
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
@@ -98,6 +100,34 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY|ShiftMask,		XK_t,	   spawn,	   SHCMD("~/scr/timer.sh") },
+	{ 0, XF86XK_AudioPrev,		spawn,		SHCMD("mpc prev") },
+	{ 0, XF86XK_AudioNext,		spawn,		SHCMD("mpc next") },
+	{ 0, XF86XK_AudioPlay,		spawn,		SHCMD("mpc toggle ; ~/conky-start.sh") },
+	{ 0, XF86XK_AudioStop,		spawn,		SHCMD("mpc stop ; ~/conky-stop.sh") },
+	{ 0, XF86XK_AudioMute,		spawn,		SHCMD("amixer -D pulse sset Master toggle") },
+	{ 0, XF86XK_AudioRaiseVolume,		spawn,		SHCMD("amixer -D pulse sset Master 5%+") },
+	{ 0, XF86XK_AudioLowerVolume,		spawn,		SHCMD("amixer -D pulse sset Master 5%-") },
+	{ 0, XF86XK_Tools,		spawn,		SHCMD("st -e ncmpcpp") },
+	{ 0, XF86XK_Mail,		spawn,		SHCMD("st -e neomutt") },
+	{ 0, XF86XK_Search,		spawn,		SHCMD("st -e ranger") },
+	{ 0, XF86XK_HomePage,		spawn,		SHCMD("brave") },
+	{ 0, XK_Print,		spawn,		SHCMD("scrot -e 'mv $f ~/Pictures/Screenshots/' && aplay ~/Sounds/camera1.wav ") },
+	{ MODKEY,		XK_minus,  spawn,          SHCMD("amixer sset Master 5%- ; ") },
+	{ MODKEY|ShiftMask, 	XK_minus,  spawn,          SHCMD("amixer sset Master 25%- ; ") },
+	{ MODKEY,		XK_equal,  spawn,          SHCMD("amixer sset Master 5%+ ; ") },
+	{ MODKEY|ShiftMask, 	XK_equal,  spawn,          SHCMD("amixer sset Master 25%+ ; ") },
+
+	{ MODKEY|ShiftMask, 		XK_equal,  spawn,          SHCMD("amixer sset Master 25%+ ; ") },
+	{ Mod1Mask|ShiftMask, 		XK_p,      spawn,	   SHCMD("mpc toggle ; ~/conky-start.sh") },
+	{ Mod1Mask|ShiftMask,		XK_s,	   spawn,	   SHCMD("mpc stop ; ~/conky-stop.sh") },
+	{ Mod1Mask|ShiftMask,		XK_bracketleft, spawn,     SHCMD("mpc prev") },
+	{ Mod1Mask|ShiftMask,		XK_bracketright, spawn,    SHCMD("mpc next") },
+	{ Mod1Mask|ShiftMask,		XK_r,	   spawn,	   SHCMD("mpc repeat") },
+	{ Mod1Mask|ShiftMask,		XK_z,	   spawn,	   SHCMD("mpc random") },
+	{ Mod1Mask|ShiftMask,		XK_x,		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && systemctl poweroff") },
+	{ MODKEY|ShiftMask,		XK_Escape,	spawn,	SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Close Xorg?\")\" = Yes ] && killall Xorg") },
+	{ MODKEY|ShiftMask,		XK_BackSpace,	spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -107,6 +137,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
+    	{ MODKEY|ShiftMask,             XK_r,      self_restart,   {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
 
@@ -126,4 +157,3 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
