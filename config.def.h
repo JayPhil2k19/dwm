@@ -108,17 +108,16 @@ static Key keys[] = {
 	{ 0, XF86XK_AudioMute,		spawn,		SHCMD("amixer -D pulse sset Master toggle") },
 	{ 0, XF86XK_AudioRaiseVolume,		spawn,		SHCMD("amixer -D pulse sset Master 5%+") },
 	{ 0, XF86XK_AudioLowerVolume,		spawn,		SHCMD("amixer -D pulse sset Master 5%-") },
-	{ 0, XF86XK_Tools,		spawn,		SHCMD("st -e ncmpcpp") },
-	{ 0, XF86XK_Mail,		spawn,		SHCMD("st -e neomutt") },
-	{ 0, XF86XK_Search,		spawn,		SHCMD("st -e ranger") },
-	{ 0, XF86XK_HomePage,		spawn,		SHCMD("brave") },
-	{ 0, XK_Print,		spawn,		SHCMD("scrot -e 'mv $f ~/Pictures/Screenshots/' && aplay ~/Sounds/camera1.wav ") },
-	{ MODKEY,		XK_minus,  spawn,          SHCMD("amixer sset Master 5%- ; ") },
-	{ MODKEY|ShiftMask, 	XK_minus,  spawn,          SHCMD("amixer sset Master 25%- ; ") },
-	{ MODKEY,		XK_equal,  spawn,          SHCMD("amixer sset Master 5%+ ; ") },
-	{ MODKEY|ShiftMask, 	XK_equal,  spawn,          SHCMD("amixer sset Master 25%+ ; ") },
-
+	{ 0, XF86XK_Tools,			spawn,		SHCMD("st -e ncmpcpp") },
+	{ 0, XF86XK_Mail,			spawn,		SHCMD("st -e neomutt") },
+	{ 0, XF86XK_Search,			spawn,		SHCMD("st -e ranger") },
+	{ 0, XF86XK_HomePage,			spawn,		SHCMD("brave") },
+	{ 0, XK_Print,				spawn,		SHCMD("scrot -e 'mv $f ~/Pictures/Screenshots/' && aplay ~/Sounds/camera1.wav ") },
+	{ MODKEY,		        XK_minus,  spawn,          SHCMD("amixer sset Master 5%- ; ") },
+	{ MODKEY|ShiftMask, 		XK_minus,  spawn,          SHCMD("amixer sset Master 25%- ; ") },
+	{ MODKEY,			XK_equal,  spawn,          SHCMD("amixer sset Master 5%+ ; ") },
 	{ MODKEY|ShiftMask, 		XK_equal,  spawn,          SHCMD("amixer sset Master 25%+ ; ") },
+
 	{ Mod1Mask|ShiftMask, 		XK_p,      spawn,	   SHCMD("mpc toggle ; ~/conky-start.sh") },
 	{ Mod1Mask|ShiftMask,		XK_s,	   spawn,	   SHCMD("mpc stop ; ~/conky-stop.sh") },
 	{ Mod1Mask|ShiftMask,		XK_bracketleft, spawn,     SHCMD("mpc prev") },
@@ -128,8 +127,8 @@ static Key keys[] = {
 	{ Mod1Mask|ShiftMask,		XK_x,		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && systemctl poweroff") },
 	{ MODKEY|ShiftMask,		XK_Escape,	spawn,	SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Close Xorg?\")\" = Yes ] && killall Xorg") },
 	{ MODKEY|ShiftMask,		XK_BackSpace,	spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
-	{ MODKEY,                       XK_F7,     spawn,          SHCMD("~/scr/dmenu_mpd_ctrl.sh") },
-	{ MODKEY,                       XK_F12,     spawn,          SHCMD("~/scr/dmenu_mpd_search.sh") },
+	{ MODKEY,                       XK_F7,       spawn,          SHCMD("~/scr/dmenu_mpd_ctrl.sh") },
+	{ MODKEY,                  	XK_F12,	    spawn,          SHCMD("~/scr/dmenu_mpd_search.sh") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
