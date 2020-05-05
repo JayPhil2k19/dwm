@@ -11,7 +11,7 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
+static const char col_cyan[]        = "#660066"; //005577
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
@@ -70,6 +70,7 @@ static const char *termcmd[]  = { "st", NULL };
 
 #include "selfrestart.c"
 #include <X11/XF86keysym.h>
+#include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
@@ -83,6 +84,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+	{ Mod1Mask|ShiftMask,           XK_j,      movestack,      {.i = +1 } },
+	{ Mod1Mask|ShiftMask,           XK_k,      movestack,      {.i = -1 } },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,             		XK_q,      killclient,     {0} },
@@ -117,18 +120,19 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask, 		XK_minus,  spawn,          SHCMD("amixer sset Master 25%- ; ") },
 	{ MODKEY,			XK_equal,  spawn,          SHCMD("amixer sset Master 5%+ ; ") },
 	{ MODKEY|ShiftMask, 		XK_equal,  spawn,          SHCMD("amixer sset Master 25%+ ; ") },
-
+	{ Mod1Mask|ShiftMask,		XK_BackSpace, spawn,	   SHCMD("amixer sset Master toggle") },
 	{ Mod1Mask|ShiftMask, 		XK_p,      spawn,	   SHCMD("mpc toggle ; ~/conky-start.sh") },
 	{ Mod1Mask|ShiftMask,		XK_s,	   spawn,	   SHCMD("mpc stop ; ~/conky-stop.sh") },
 	{ Mod1Mask|ShiftMask,		XK_bracketleft, spawn,     SHCMD("mpc prev") },
 	{ Mod1Mask|ShiftMask,		XK_bracketright, spawn,    SHCMD("mpc next") },
 	{ Mod1Mask|ShiftMask,		XK_r,	   spawn,	   SHCMD("mpc repeat") },
 	{ Mod1Mask|ShiftMask,		XK_z,	   spawn,	   SHCMD("mpc random") },
-	{ Mod1Mask|ShiftMask,		XK_x,		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && systemctl poweroff") },
+	{ MODKEY|ShiftMask,		XK_x,		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && systemctl poweroff") },
 	{ MODKEY|ShiftMask,		XK_Escape,	spawn,	SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Close Xorg?\")\" = Yes ] && killall Xorg") },
 	{ MODKEY|ShiftMask,		XK_BackSpace,	spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
 	{ MODKEY,                       XK_F7,       spawn,          SHCMD("~/scr/dmenu_mpd_ctrl.sh") },
 	{ MODKEY,                  	XK_F12,	    spawn,          SHCMD("~/scr/dmenu_mpd_search.sh") },
+	{ Mod1Mask,			XK_F7,      spawn,	     SHCMD("feh -rz --bg-scale ~/Pictures/Wallpapers/*") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
