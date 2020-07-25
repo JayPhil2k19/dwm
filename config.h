@@ -2,7 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
-static const unsigned int gappx     = 5;        /* gaps between windows */
+static const unsigned int gappx     = 10;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -13,12 +13,13 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#000000";
 static const char col_cyan[]        = "#005577";
+static const char col_red[]        = "#ff0000";
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_cyan,  col_red  },
 	[SchemeTitle]  = { col_gray4, col_cyan,  col_cyan  },
 };
 static const unsigned int alphas[][3]      = {
@@ -26,6 +27,7 @@ static const unsigned int alphas[][3]      = {
 	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
+
 
 static char* const autostart[][2] = { /* please replace 2 with maximum number of arguments from autostart array */
     { "st", NULL },
@@ -78,13 +80,14 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, topbar ? NULL : "-b", NULL };
+static const char *dmenucmd[] = { "dmenu_run","-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, topbar ? NULL : "-b", NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x32", NULL };
 #include "movestack.c"
 #include "selfrestart.c"
 #include <X11/XF86keysym.h>
+#include "mpdcontrol.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
@@ -103,6 +106,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,             		XK_q,      killclient,     {0} },
+	{ MODKEY|ShiftMask,             XK_x,      killunsel,      {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
@@ -140,20 +144,25 @@ static Key keys[] = {
         { Mod1Mask|ShiftMask,             XK_minus,  spawn,          SHCMD("amixer sset Master 25%- ; ") },
         { Mod1Mask,                       XK_equal,  spawn,          SHCMD("amixer sset Master 5%+ ; ") },
         { Mod1Mask|ShiftMask,             XK_equal,  spawn,          SHCMD("amixer sset Master 25%+ ; ") },
-        { Mod1Mask|ShiftMask,           XK_BackSpace, spawn,       SHCMD("amixer sset Master toggle") },
-        { Mod1Mask|ShiftMask,           XK_p,      spawn,          SHCMD("mpc toggle ; ~/conky-start.sh") },
-        { Mod1Mask|ShiftMask,           XK_s,      spawn,          SHCMD("mpc stop ; ~/conky-stop.sh") },
-        { Mod1Mask|ShiftMask,           XK_bracketleft, spawn,     SHCMD("mpc prev") },
-        { Mod1Mask|ShiftMask,           XK_bracketright, spawn,    SHCMD("mpc next") },
-        { Mod1Mask|ShiftMask,           XK_r,      spawn,          SHCMD("mpc repeat") },
-        { Mod1Mask|ShiftMask,           XK_z,      spawn,          SHCMD("mpc random") },
+        { Mod1Mask,           		XK_BackSpace, spawn,       SHCMD("amixer sset Master toggle") },
+        { Mod1Mask,           		XK_p,      spawn,          SHCMD("mpc toggle ; ~/conky-start.sh") },
+        { Mod1Mask,           		XK_s,      spawn,          SHCMD("mpc stop ; ~/conky-stop.sh") },
+        { Mod1Mask,           		XK_bracketleft, spawn,     SHCMD("mpc prev") },
+        { Mod1Mask,           		XK_bracketright, spawn,    SHCMD("mpc next") },
+        { Mod1Mask,           		XK_r,      spawn,          SHCMD("mpc repeat") },
+        { Mod1Mask,           		XK_z,      spawn,          SHCMD("mpc random") },
 	{ MODKEY,                       XK_F7,      spawn,          SHCMD("~/scr/dmenu_mpd_ctrl.sh") },
         { MODKEY,                       XK_F12,     spawn,          SHCMD("~/scr/dmenu_mpd_search.sh") },
         { Mod1Mask,                     XK_F7,      spawn,           SHCMD("feh -rz --bg-scale ~/Pictures/Wallpapers/*") },
         { Mod1Mask|ShiftMask,           XK_c,       spawn,          SHCMD("conky -c ~/.conky_music") },
-	{ MODKEY|ShiftMask,		XK_x,		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && systemctl poweroff") },
-	{ MODKEY|ShiftMask,		XK_Escape,	spawn,	SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Close Xorg?\")\" = Yes ] && killall Xorg") },
-	{ MODKEY|ShiftMask,		XK_BackSpace,	spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
+	{ ControlMask,        		XK_minus, 		setborderpx,    {.i = -1 } },
+	{ ControlMask,        		XK_minus, 		setborderpx,    {.i = +1 } },
+	{ ControlMask|ShiftMask,        XK_minus, 		setborderpx,    {.i = -5 } },
+	{ ControlMask|ShiftMask,        XK_equal, 		setborderpx,    {.i = +5 } },
+	{ ControlMask|ShiftMask,        XK_0, 	setborderpx,    {.i = 0 } },
+	{ ControlMask|Mod1Mask,		XK_End,  spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown?\")\" = Yes ] && systemctl poweroff") },
+	{ ControlMask|Mod1Mask,		XK_Home,	    spawn,	SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Logout?\")\" = Yes ] && killall Xorg") },
+	{ ControlMask|Mod1Mask,		XK_Delete,	spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot?\")\" = Yes ] && sudo -A reboot") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -165,6 +174,11 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
     	{ MODKEY|ShiftMask,             XK_r,      self_restart,   {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY,                       XK_F1,     mpdchange,      {.i = -1} },
+	{ MODKEY,                       XK_F2,     mpdchange,      {.i = +1} },
+	{ MODKEY,           		XK_F4,      spawn,          SHCMD("mpc repeat") },
+        { MODKEY,           		XK_F3,      spawn,          SHCMD("mpc random") },
+	{ MODKEY,                       XK_Escape, mpdcontrol,     {0} },
 };
 
 /* button definitions */
