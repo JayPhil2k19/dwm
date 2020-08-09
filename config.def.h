@@ -12,8 +12,8 @@ static const char col_gray1[]       = "#000000";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#000000";
-static const char col_cyan[]        = "#005577";
-static const char col_red[]        = "#ff0000";
+static const char col_cyan[]        = "#0754EE";
+static const char col_red[]        = "#FEDA00";
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
@@ -31,12 +31,13 @@ static const unsigned int alphas[][3]      = {
 
 static char* const autostart[][2] = { /* please replace 2 with maximum number of arguments from autostart array */
     { "st", NULL },
-    { "dwmblocks", NULL },
+//    { "dwmblocks", NULL },
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+//static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
+static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
@@ -57,14 +58,14 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	{ "",      tile },    /* first entry is default */
+	{ "👻",      NULL },    /* no layout function means floating behavior */
+	{ "🌑",      monocle },
 	{ NULL,       NULL },
-	{ "[#]",       horizgrid },
-	{ "[G]",       grid },
-	{ "|M|",      centeredmaster },
-	{ ">M>",      centeredfloatingmaster },
+	{ "",       horizgrid },
+	{ "",       grid },
+	{ "",      centeredmaster },
+	{ "",      centeredfloatingmaster },
 };
 
 /* key definitions */
@@ -128,6 +129,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = -5 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 	{ MODKEY|ShiftMask,             XK_t,      spawn,          SHCMD("~/scr/timer.sh") },
+	{ Mod1Mask|ControlMask,		XK_Return,    spawn,          SHCMD("~/run-xmenu.sh") },
 	{ 0, XF86XK_AudioPrev,          spawn,          SHCMD("mpc prev") },
         { 0, XF86XK_AudioNext,          spawn,          SHCMD("mpc next") },
         { 0, XF86XK_AudioPlay,          spawn,          SHCMD("mpc toggle ; ~/conky-start.sh") },
@@ -190,10 +192,12 @@ static Button buttons[] = {
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+	{ ClkClientWin,         MODKEY,         Button3,        spawn,      SHCMD("~/run-xmenu.sh") },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+//	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
 	{ ClkTagBar,            0,              Button1,        view,           {0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	{ ClkTagBar,            MODKEY,         Button2,        toggletag,      {0} },
+	{ ClkTagBar,            MODKEY,         Button3,        spawn,      SHCMD("~/run-xmenu.sh") },
 };
