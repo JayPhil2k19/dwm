@@ -19,6 +19,7 @@ static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+	[SchemeInv]  = { col_gray1, col_gray3, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_red  },
 //	[SchemeTitle]  = { col_gray4, col_cyan,  col_cyan  },
 
@@ -99,6 +100,7 @@ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g","-f Hack
 #include <X11/XF86keysym.h>
 #include "mpdcontrol.c"
 #include "focusurgent.c"
+#include "movethrow.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
@@ -114,6 +116,11 @@ static Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
+    	{ MODKEY|ShiftMask,             XK_Up,     movethrow,      {.ui = DIR_N  }},
+    	{ MODKEY|ShiftMask,             XK_Down,   movethrow,      {.ui = DIR_S  }},
+    	{ MODKEY|ShiftMask,             XK_Left,   movethrow,      {.ui = DIR_W  }},
+    	{ MODKEY|ShiftMask,             XK_Right,  movethrow,      {.ui = DIR_E  }},
+    	{ MODKEY|ShiftMask,             XK_m,      movethrow,      {.ui = DIR_C  }},
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,             		XK_q,      killclient,     {0} },

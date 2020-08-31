@@ -98,6 +98,8 @@ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g","-f Hack
 #include "selfrestart.c"
 #include <X11/XF86keysym.h>
 #include "mpdcontrol.c"
+#include "focusurgent.c"
+#include "movethrow.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
@@ -113,6 +115,11 @@ static Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
+    	{ MODKEY|ShiftMask,             XK_Up,     movethrow,      {.ui = DIR_N  }},
+    	{ MODKEY|ShiftMask,             XK_Down,   movethrow,      {.ui = DIR_S  }},
+    	{ MODKEY|ShiftMask,             XK_Left,   movethrow,      {.ui = DIR_W  }},
+    	{ MODKEY|ShiftMask,             XK_Right,  movethrow,      {.ui = DIR_E  }},
+    	{ MODKEY|ShiftMask,             XK_m,      movethrow,      {.ui = DIR_C  }},
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,             		XK_q,      killclient,     {0} },
@@ -128,6 +135,7 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
@@ -137,6 +145,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = +5 } },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = -5 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
+	{ MODKEY|ShiftMask,             XK_u,      focusurgent,    {0} },
 	{ MODKEY|ShiftMask,             XK_t,      spawn,          SHCMD("~/scr/timer.sh") },
 	{ Mod1Mask|ControlMask,		XK_Return,    spawn,          SHCMD("~/run-xmenu.sh") },
 	{ 0, XF86XK_AudioPrev,          spawn,          SHCMD("mpc prev") },
