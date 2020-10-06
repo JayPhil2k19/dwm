@@ -59,6 +59,7 @@ static const Rule rules[] = {
 
 #include "horizgrid.c"
 #include "layouts.c"
+#include "fibonacci.c"
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
@@ -73,6 +74,7 @@ static const Layout layouts[] = {
 	{ "",       grid },
 	{ "",      centeredmaster },
 	{ "",      centeredfloatingmaster },
+	{ "",     spiral },
 };
 
 /* key definitions */
@@ -132,6 +134,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[5]} },
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[6]} },
+	{ MODKEY,                       XK_s,      setlayout,      {.v = &layouts[8]} },
 	{ MODKEY|ControlMask,		XK_comma,  cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
@@ -148,7 +151,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 	{ MODKEY|ShiftMask,             XK_u,      focusurgent,    {0} },
 	{ MODKEY|ShiftMask,             XK_t,      spawn,          SHCMD("~/scr/timer.sh") },
-	{ Mod1Mask|ControlMask,		XK_Return,    spawn,          SHCMD("~/run-xmenu.sh") },
+	{ Mod1Mask|ControlMask,		XK_Return,    spawn,          SHCMD("~/run-xmenu.sh && aplay ~/Sounds/frying_pan_hit.wav") },
 	{ 0, XF86XK_AudioPrev,          spawn,          SHCMD("mpc prev") },
         { 0, XF86XK_AudioNext,          spawn,          SHCMD("mpc next") },
         { 0, XF86XK_AudioPlay,          spawn,          SHCMD("mpc toggle ; ~/conky-start.sh") },
@@ -161,10 +164,10 @@ static Key keys[] = {
         { 0, XF86XK_Search,             spawn,          SHCMD("st -e ranger") },
         { 0, XF86XK_HomePage,           spawn,          SHCMD("brave") },
 	{ 0, XK_Print,                  spawn,          SHCMD("scrot -e 'mv $f ~/Pictures/Screenshots/' && aplay ~/Sounds/camera1.wav ") },
- 	{ Mod1Mask,                     XK_minus,  spawn,          SHCMD("amixer sset Master 5%- ; ") },
-        { Mod1Mask|ShiftMask,             XK_minus,  spawn,          SHCMD("amixer sset Master 25%- ; ") },
-        { Mod1Mask,                       XK_equal,  spawn,          SHCMD("amixer sset Master 5%+ ; ") },
-        { Mod1Mask|ShiftMask,             XK_equal,  spawn,          SHCMD("amixer sset Master 25%+ ; ") },
+ 	{ Mod1Mask,                     XK_minus,  spawn,          SHCMD("amixer sset Master 5%- && aplay ~/Sounds/beep_ping.wav ") },
+        { Mod1Mask|ShiftMask,             XK_minus,  spawn,          SHCMD("amixer sset Master 25%- && aplay ~/Sounds/beep_ping.wav  ") },
+        { Mod1Mask,                       XK_equal,  spawn,          SHCMD("amixer sset Master 5%+ && aplay ~/Sounds/beep_ping.wav  ") },
+        { Mod1Mask|ShiftMask,             XK_equal,  spawn,          SHCMD("amixer sset Master 25%+  && aplay ~/Sounds/beep_ping.wav ") },
         { Mod1Mask,           		XK_BackSpace, spawn,       SHCMD("amixer sset Master toggle") },
         { Mod1Mask,           		XK_p,      spawn,          SHCMD("mpc toggle ; ~/conky-start.sh") },
         { Mod1Mask,           		XK_s,      spawn,          SHCMD("mpc stop ; ~/conky-stop.sh") },
@@ -181,9 +184,9 @@ static Key keys[] = {
 	{ ControlMask|ShiftMask,        XK_minus, 		setborderpx,    {.i = -5 } },
 	{ ControlMask|ShiftMask,        XK_equal, 		setborderpx,    {.i = +5 } },
 	{ ControlMask|ShiftMask,        XK_0, 	setborderpx,    {.i = 0 } },
-	{ ControlMask|Mod1Mask,		XK_End,  spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown?\")\" = Yes ] && systemctl poweroff") },
-	{ ControlMask|Mod1Mask,		XK_Home,	    spawn,	SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Logout?\")\" = Yes ] && killall Xorg") },
-	{ ControlMask|Mod1Mask,		XK_Delete,	spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot?\")\" = Yes ] && sudo -A reboot") },
+	{ ControlMask|Mod1Mask,		XK_End,  spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown?\")\" = Yes ] && aplay ~/Sounds/computer_magic.wav && systemctl poweroff") },
+	{ ControlMask|Mod1Mask,		XK_Home,	    spawn,	SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Logout?\")\" = Yes ] && aplay ~/Sounds/laser_x.wav && killall Xorg") },
+	{ ControlMask|Mod1Mask,		XK_Delete,	spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot?\")\" = Yes ] && aplay ~/Sounds/computer_reboot.wav && sudo -A reboot") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
